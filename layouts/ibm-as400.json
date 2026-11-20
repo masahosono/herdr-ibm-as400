@@ -1,0 +1,123 @@
+{
+  "id": "root",
+  "type": "column",
+  "titlebar": "none",
+  "traffic_lights": [14, 14],
+  "preview": "layouts/ibm-as400.svg",
+  "theme": "graphite",
+  "colors": {
+    "background": "#000000",
+    "foreground": "#33ff33",
+    "canvas": "#000000",
+    "chrome": "#000000",
+    "surface": "#000000",
+    "popover": "#000000",
+    "raised": "#0a1f0a",
+    "hover": "#145214",
+    "selected": "#1f6f1f",
+    "border": "#145214",
+    "input": "#33ff33",
+    "muted": "#2bd42b",
+    "dim": "#1f9a1f",
+    "accent": "#33ff33",
+    "accent_foreground": "#000000",
+    "solid": "#33ff33",
+    "solid_foreground": "#000000",
+    "selection": "#1f6f1f",
+    "working": "#ffffff",
+    "blocked": "#ff3b3b",
+    "done": "#ffff3c",
+    "idle": "#1f9a1f",
+    "unknown": "#1f9a1f",
+    "ansi0": "#000000",
+    "ansi1": "#ff3b3b",
+    "ansi2": "#33ff33",
+    "ansi3": "#ffff3c",
+    "ansi4": "#6e9bff",
+    "ansi5": "#ff5cff",
+    "ansi6": "#3cffff",
+    "ansi7": "#d8ffd8",
+    "ansi8": "#4f7f4f",
+    "ansi9": "#ff6b6b",
+    "ansi10": "#7cff7c",
+    "ansi11": "#ffff8a",
+    "ansi12": "#9db9ff",
+    "ansi13": "#ff9cff",
+    "ansi14": "#9cffff",
+    "ansi15": "#ffffff"
+  },
+  "font": "IBM 3270",
+  "font_size": 17,
+  "ui_font": "IBM 3270",
+  "terminal_padding": [8, 6],
+  "background": "#000000",
+  "children": [
+    {
+      "id": "header",
+      "type": "block",
+      "size": { "px": 48 },
+      "window_drag": true,
+      "content": { "mod": "ibm-as400", "props": { "view": "header" } }
+    },
+    {
+      "id": "screen",
+      "type": "row",
+      "divider": { "width": 1, "color": "#145214" },
+      "children": [
+        {
+          "id": "sidebar",
+          "type": "column",
+          "size": { "px": 330 },
+          "min": 240,
+          "max": 560,
+          "divider": { "width": 1, "color": "#145214" },
+          "children": [
+            { "id": "spaces", "type": "block", "size": { "weight": 1 }, "min": 120, "content": { "mod": "ibm-as400", "props": { "view": "spaces" } } },
+            { "id": "jobs", "type": "block", "size": { "weight": 1 }, "min": 120, "content": { "mod": "ibm-as400", "props": { "view": "jobs" } } }
+          ]
+        },
+        {
+          "id": "work",
+          "type": "column",
+          "children": [
+            {
+              "id": "tabs",
+              "type": "block",
+              "size": { "px": 28 },
+              "window_drag": true,
+              "content": { "mod": "ibm-as400", "props": { "view": "tabs" } }
+            },
+            {
+              "id": "main",
+              "type": "block",
+              "padding": 8,
+              "content": {
+                "tab": "active",
+                "pane": {
+                  "header": {
+                    "content": { "mod": "ibm-as400", "props": { "view": "pane" } },
+                    "height": 22,
+                    "position": "top",
+                    "reveal": "always"
+                  },
+                  "background": "#000000",
+                  "border": { "width": 1, "color": "#145214" },
+                  "focus": { "width": 1, "color": "#33ff33" },
+                  "radius": 0,
+                  "gap": 8,
+                  "lone": true
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "console",
+      "type": "block",
+      "size": { "px": 86 },
+      "content": { "mod": "ibm-as400", "props": { "view": "console" } }
+    }
+  ]
+}
