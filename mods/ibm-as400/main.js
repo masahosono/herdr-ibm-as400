@@ -7,6 +7,7 @@
 //   pane     a pane's header (Job / Number / Dir, its status)
 //   console  the ===> command line, function keys, message line and the OIA
 //   opt      a popup window with a row's options (opened by the mod itself)
+//   boot     the full-window title screen shown for 3s when Herdr starts
 
 import { View, div } from "gpui-kit";
 import { h_flex, v_flex, InputState, Input } from "gpui-base";
@@ -100,6 +101,51 @@ function openOpt(kind, id, name) {
   });
 }
 
+// ---- the title screen (view "boot")
+
+const BOOT_MS = 3000;
+
+// "AS/400" in block letters, each drawn with its own character, slanted.
+const GLYPHS = {
+  A: ["  #####  ", " ##   ## ", "##     ##", "##     ##", "#########", "##     ##", "##     ##"],
+  S: [" ####### ", "##     ##", "##       ", " ####### ", "       ##", "##     ##", " ####### "],
+  "/": ["      ##", "     ## ", "    ##  ", "   ##   ", "  ##    ", " ##     ", "##      "],
+  4: ["     ### ", "    #### ", "   ## ## ", "  ##  ## ", " ########", "      ## ", "      ## "],
+  0: [" ####### ", "##     ##", "##     ##", "##     ##", "##     ##", "##     ##", " ####### "],
+};
+const INK = { A: "A", S: "$", "/": "/", 4: "4", 0: "0" };
+const LOGO = GLYPHS.A.map((_, r) =>
+  " ".repeat(GLYPHS.A.length - 1 - r) +
+  [..."AS/400"].map((ch) => GLYPHS[ch][r].replace(/#/g, INK[ch])).join("  "));
+
+// The falling characters under the logo: one drop per column.
+const RAIN_COLS = 260;
+const RAIN_ROWS = 70;
+const RAIN_CHARS = "0123456789ABCDEF$#@%&*+=<>/\\:;";
+const rainChar = () => RAIN_CHARS[Math.floor(Math.random() * RAIN_CHARS.length)];
+const newDrop = (top) => ({
+  y: top ? Math.random() * RAIN_ROWS : -Math.random() * RAIN_ROWS * 0.25,
+  speed: 0.35 + Math.random() * 0.9,
+  len: 12 + Math.floor(Math.random() * 40),
+});
+
+function openBoot() {
+  openOverlay({ mod: MOD, kind: "dialog", frame: "none", modal: true, width: 1, height: 1, props: { view: "boot" } });
+}
+
+// Seconds since Herdr started (its process is the mod's parent), or null.
+async function appAge() {
+  try {
+    const r = await exec("sh", ["-c", 'ps -o etime= -p "$PPID"']);
+    const m = r.stdout.trim().match(/^(?:(\d+)-)?(?:(\d+):)?(\d+):(\d+)$/);
+    if (!m) return null;
+    const [, d, h, mi, s] = m.map((x) => Number(x) || 0);
+    return ((d * 24 + h) * 60 + mi) * 60 + s;
+  } catch {
+    return null;
+  }
+}
+
 // The function keys. F24 shows the other set.
 const KEYS = [
   [
@@ -144,6 +190,11 @@ export default class As400 extends View {
     this.now = new Date();
     cx.timer.every(10000, (cx) => { this.now = new Date(); cx.notify(); });
     if (checking()) return;
+    // Herdr just started with this layout on: the title screen.
+    cx.spawn(async () => {
+      const age = await appAge();
+      if (age !== null && age < 45) openBoot();
+    });
     cx.spawn(async (cx) => {
       try {
         const r = await exec("hostname", ["-s"]);
@@ -368,6 +419,7 @@ export default class As400 extends View {
       case "CFGHERDR": return run("app.settings", {});
       case "HELP": return run("app.help", {});
       case "SIGNOFF": return run("layout.switch", {});
+      case "DSPLOGO": return openBoot();
       default:
         return this.say(`CPD0030 Command ${V} in library *LIBL not found.`, true);
     }
@@ -415,6 +467,80 @@ export default class As400 extends View {
         .child(txt(`RUN ${working}  MSGW ${blocked}`, C.dim))
         .child(div().w(28))
         .child(txt(`${pad2(sp?.index ?? 0)}/${pad3(tab?.index ?? 0)}`, C.green)));
+  }
+
+  // ---------------------------------------------------------------- boot
+
+  init_boot(cx) {
+    this.handle = cx.focus_handle();
+    this.handle.focus();
+    this.grid = Array.from({ length: RAIN_ROWS }, () => Array.from({ length: RAIN_COLS }, rainChar));
+    this.drops = Array.from({ length: RAIN_COLS }, () => newDrop(true));
+    this.rain = this.rainLayers();
+    cx.timer.every(70, (cx) => { this.stepRain(); cx.notify(); });
+    cx.timer.after(BOOT_MS, () => this.closeBoot());
+  }
+
+  closeBoot() {
+    if (this.closed) return;
+    this.closed = true;
+    closeOverlay(props()?.overlay);
+  }
+
+  stepRain() {
+    for (let i = 0; i < 60; i++) {
+      this.grid[Math.floor(Math.random() * RAIN_ROWS)][Math.floor(Math.random() * RAIN_COLS)] = rainChar();
+    }
+    this.drops.forEach((d, c) => {
+      d.y += d.speed;
+      if (d.y - d.len > RAIN_ROWS) this.drops[c] = newDrop(false);
+      const h = Math.floor(this.drops[c].y);
+      if (h >= 0 && h < RAIN_ROWS) this.grid[h][c] = rainChar();
+    });
+    this.rain = this.rainLayers();
+  }
+
+  // Three layers of text, one per brightness: the heads white, the tails
+  // green fading to dim. Blanks elsewhere so the monospace layers line up.
+  rainLayers() {
+    const layers = [[], [], []];
+    for (let r = 0; r < RAIN_ROWS; r++) {
+      const rows = ["", "", ""];
+      for (let c = 0; c < RAIN_COLS; c++) {
+        const d = this.drops[c].y - r;
+        const k = d < 0 || d >= this.drops[c].len ? -1 : d < 1 ? 0 : d < this.drops[c].len * 0.45 ? 1 : 2;
+        for (let l = 0; l < 3; l++) rows[l] += l === k ? this.grid[r][c] : " ";
+      }
+      for (let l = 0; l < 3; l++) layers[l].push(rows[l]);
+    }
+    return layers;
+  }
+
+  draw_boot() {
+    const title = (s) => div().whitespace_nowrap().child(s);
+    const layer = (rows, color) => v_flex().absolute().top(0).left(0)
+      .text_color(color).text_size(14).line_height("16px")
+      .children(rows.map((s) => div().whitespace_nowrap().child(s)));
+    return v_flex().id("boot").size_full().bg(C.bg).items_center().overflow_hidden()
+      .track_focus(this.handle).on_key_down((_e, cx) => { cx.stop_propagation(); this.closeBoot(); })
+      .on_click(() => this.closeBoot())
+      .child(v_flex().pt(48).items_center().text_color(C.green).text_size(42).line_height("50px")
+        .child(title("HERDR GUIDE TO"))
+        .child(title("WORK WITH AGENTS"))
+        .child(title("IN THE")))
+      .child(div().mt(18).h(8).w("78%").rounded(4).bg(C.green))
+      .child(v_flex().mt(28).text_color(C.green).text_size(18).line_height("20px")
+        .children(LOGO.map((s) => div().whitespace_nowrap().child(s))))
+      .child(div().relative().mt(28).w("88%").flex_1().min_h(0).overflow_hidden()
+        .child(layer(this.rain[2], C.dim))
+        .child(layer(this.rain[1], C.green))
+        .child(layer(this.rain[0], C.white)))
+      .child(h_flex().w("88%").h(64).items_center().text_size(TEXT)
+        .child(blink(txt("Starting system . . .", C.white), true))
+        .child(div().flex_1())
+        .child(v_flex().items_end()
+          .child(txt("HERDR/400", C.green).text_size(22))
+          .child(txt("VERSION 1 RELEASE 1", C.white))));
   }
 
   // ---------------------------------------------------------------- opt popup

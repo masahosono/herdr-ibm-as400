@@ -32,4 +32,4 @@ herdr-app do layout.switch --name ibm-as400
 ## Files
 
 - `layouts/ibm-as400.json`: the layout. Every block is the `ibm-as400` mod with a `view` prop.
-- `mods/ibm-as400/main.js`: one `View` class; `init_<view>` and `draw_<view>` per view (`header`, `spaces`, `jobs`, `tabs`, `pane`, `console`, `opt`). `JOB` maps agent statuses to job statuses, `KEYS` holds the two function-key sets, `submit` the command line's commands, `options` each row's options.
+- `mods/ibm-as400/main.js`: one `View` class; `init_<view>` and `draw_<view>` per view (`header`, `spaces`, `jobs`, `tabs`, `pane`, `console`, `opt`, `boot`). `JOB` maps agent statuses to job statuses, `KEYS` holds the two function-key sets, `submit` the command line's commands, `options` each row's options.

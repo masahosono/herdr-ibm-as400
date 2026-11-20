@@ -26,6 +26,7 @@ Top to bottom; everything is black (`#000000`) with no title bar; traffic lights
 
 ## How it behaves
 
+- **Title screen**: when Herdr starts with this layout on (the app process is under 45 seconds old), a full-window black screen shows for 3 seconds: `HERDR GUIDE TO` / `WORK WITH AGENTS` / `IN THE` in large green letters, a thick green bar, `AS/400` in slanted block letters drawn with `A`, `$`, `/`, `4` and `0`, green characters falling below it (white heads, green tails fading to dim green), and at the bottom `Starting system . . .` blinking in white and `HERDR/400` / `VERSION 1 RELEASE 1` on the right. A click or any key closes it early. Switching to the layout later doesn't show it; `DSPLOGO` on the command line does.
 - **Agent status as job status** (sidebar rows, tab items, pane headers): working is `RUN` in white, blocked `MSGW` in red blinking (opacity 0.15 to 1, 1000ms), done `OUTQ` in yellow, idle `DEQW` in green. A pane without an agent (a shell, an editor) is `DSPW` in dim green. A space row with no agents shows no status. In reverse video the status text is black and doesn't blink.
 - **Space row**: a click selects the space (`space.select`). A click on its `_` or a right-click opens its options.
 - **Job row**: a click focuses the agent (`agent.focus`). `_` or right-click opens its options.
@@ -41,6 +42,7 @@ Top to bottom; everything is black (`#000000`) with no title bar; traffic lights
   - `CRTTAB [name]`, `ENDTAB`, `RNMTAB [name]`: `tab.new`, `tab.close`, `tab.rename`.
   - `CALL prog args` or `STRAGT prog args`: a new tab running it (`tab.new {argv}`); `CALL PGM(claude)` and `CALL PGM('claude --resume')` work too.
   - `SBMJOB prog args`: the same in the background (`focus: false`), "Job X submitted to job queue QBATCH in library QGPL."
+  - `DSPLOGO`: the title screen.
   - `SPLIT` / `SPLIT DOWN`: `pane.split`. `WRKCFG`: settings. `HELP`: `app.help`. `SIGNOFF`: `layout.switch` to the next layout.
   - Anything else: `CPD0030 Command X in library *LIBL not found.` in red.
 - **Function keys**: click a key on the line, or press it while the command line has the keyboard. F3 `layout.switch` (next layout), F4 `app.palette`, F6 `space.new`, F9 puts the previous commands back in the input one by one, F10 split right, F11 `pane.zoom`, F12 clears the input and the message, F24 swaps the key set; F7/F8 `tab.prev`/`tab.next`, F13 `tab.new`, F14 split down, F16 `pane.close`, F17 `app.settings`, F18 `app.help`.
@@ -49,7 +51,7 @@ Top to bottom; everything is black (`#000000`) with no title bar; traffic lights
 ## Built from
 
 - **Layout** `layouts/ibm-as400.json`: `root` column [`header` block, `screen` row [`sidebar` column [`spaces`, `jobs`], `work` column [`tabs`, `main` (`tab: active` with pane frames and a `pane` header)]], `console` block]. Every block is the `ibm-as400` mod with props `{ view }`: `header`, `spaces`, `jobs`, `tabs`, `pane` (the pane header), `console`. Root look: `theme: "graphite"` with every color overridden in `colors` (background, chrome, canvas, surface, popover all `#000000`; foreground and accent `#33ff33`; status colors; `ansi0`..`ansi15` as the 5250 palette), `font` and `ui_font` `IBM 3270`, `font_size` 17, `terminal_padding` [8, 6], `titlebar: "none"`, `preview: "layouts/ibm-as400.svg"`.
-- **Mod** `ibm-as400` (MIT): one `View`; `props().view` picks `init_<view>` / `draw_<view>`. Its popup is the view `opt`, opened with `openOverlay({ kind: "popup", frame: "none" })`. It uses `spaces`, `agents`, `panes`, `setAgentOrder`, `exec("hostname", ["-s"])` once, `InputState` / `Input` from `gpui-base`, and `.loop("opacity")` for the blink. Commands: `space.select/new/close/rename`, `tab.select/new/close/rename/prev/next`, `pane.focus/zoom/split/close`, `agent.focus`, `terminal.peek/kill`, `layout.switch`, `app.palette/settings/help`.
+- **Mod** `ibm-as400` (MIT): one `View`; `props().view` picks `init_<view>` / `draw_<view>`. Its popup is the view `opt`, opened with `openOverlay({ kind: "popup", frame: "none" })`; the title screen is the view `boot`, a modal `dialog` with `frame: "none"` at width and height 1, opened by the `header` view when `ps -o etime= -p $PPID` says Herdr started under 45 seconds ago. It uses `spaces`, `agents`, `panes`, `setAgentOrder`, `exec("hostname", ["-s"])` once, `InputState` / `Input` from `gpui-base`, and `.loop("opacity")` for the blink. Commands: `space.select/new/close/rename`, `tab.select/new/close/rename/prev/next`, `pane.focus/zoom/split/close`, `agent.focus`, `terminal.peek/kill`, `layout.switch`, `app.palette/settings/help`.
 - **Font**: `mods/ibm-as400/fonts/3270-Regular.ttf` (family `IBM 3270`, v3.0.1 from github.com/rbanffy/3270font, BSD-3-Clause, license in `fonts/LICENSE-3270.txt`). Herdr loads fonts from a mod's `fonts/` folder.
 - **Art**: `layouts/ibm-as400.svg` (the settings picture); `preview.png` is it rendered at 1600×1000.
 - No shipped mods are used.
@@ -70,4 +72,5 @@ Top to bottom; everything is black (`#000000`) with no title bar; traffic lights
 - An agent that starts working shows `RUN` on its job row, tab and pane header, and `X SYSTEM` appears; a blocked one blinks `MSGW` and `MW`.
 - Right-clicking a space opens `Work with Space`; typing `7` makes a new tab there.
 - Typing `CALL claude` on the command line opens a tab running claude; `FOO` shows `CPD0030 Command FOO in library *LIBL not found.`
+- Restarting Herdr shows the title screen with falling characters for 3 seconds; `DSPLOGO` shows it again.
 - Clicking `F24=More keys` swaps the key line; `F11=Zoom` on a pane header zooms it.
