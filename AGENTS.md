@@ -4,11 +4,19 @@ Notes for AI agents working on this repository. What the layout looks like and h
 
 ## Publishing
 
-This is a layout for the [herdr.dev gallery](https://herdr.dev/gallery/). The repository root mirrors `~/.config/herdr-app` (`layouts/<name>.json` and `mods/<name>/`), plus `RECIPE.md` and `preview.png`. A public repository with the GitHub topic `herdr-layout` shows up in the gallery within the hour. How to write `RECIPE.md` is described under "Layouts and mods other people made" in the `~/.config/herdr-app/AGENTS.md` that Herdr App generates.
+This is a layout for the [herdr.dev gallery](https://herdr.dev/gallery/). The repository root mirrors `~/.config/herdr-app` (`layouts/<name>.json` and `mods/<name>/`), plus `RECIPE.md`, `preview.png` and its source `preview.svg`. A public repository with the GitHub topic `herdr-layout` shows up in the gallery within the hour. How to write `RECIPE.md` is described under "Layouts and mods other people made" in the `~/.config/herdr-app/AGENTS.md` that Herdr App generates.
 
 Keep it self-contained: no `keys.json`, no theme file (the colors are on the layout root), and the font ships in the mod's `fonts/`.
 
-`preview.png` is rendered from `layouts/ibm-as400.svg` (`qlmanage -t -s 1600`, cropped to 1600×1000). Don't use a real `herdr-app shot`: it shows your own spaces and terminals.
+`preview.png` is the title screen, rendered from `preview.svg` with headless Chrome (qlmanage doesn't load the bundled font the SVG points at):
+
+```bash
+"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless --hide-scrollbars \
+  --window-size=1200,750 --force-device-scale-factor=1.3333333 --virtual-time-budget=5000 \
+  --screenshot="$PWD/preview.png" "file://$PWD/preview.svg"
+```
+
+Don't use a real `herdr-app shot`: it shows your own spaces and terminals.
 
 ## Running it while developing
 
