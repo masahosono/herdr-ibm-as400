@@ -42,6 +42,8 @@ const JOB = {
   idle: ["DEQW", C.green],
 };
 const jobStatus = (status) => JOB[status] ?? ["DSPW", C.dim];
+// RUN, MSGW and OUTQ blink; DEQW and DSPW stay still.
+const blinks = (status) => status === "working" || status === "blocked" || status === "done";
 
 const txt = (s, color) => div().flex_none().whitespace_nowrap().text_color(color).child(String(s));
 const cell = (s, w, color) => div().flex_none().w(w).overflow_hidden().whitespace_nowrap().text_color(color).child(String(s));
@@ -259,7 +261,7 @@ export default class As400 extends View {
           .on_click((_e, cx) => { cx.stop_propagation(); openOpt("space", s.id, s.name); })))
       .child(fill(upper(s.name), fg(on ? C.bg : C.green)))
       .child(cell(String(s.tabs.length).padStart(3), 44, fg(C.green)))
-      .child(blink(cell(st, 52, fg(color)), s.status === "blocked" && !on));
+      .child(blink(cell(st, 52, fg(color)), blinks(s.status) && !on));
   }
 
   // ---------------------------------------------------------------- jobs
@@ -298,7 +300,7 @@ export default class As400 extends View {
           .on_click((_e, cx) => { cx.stop_propagation(); openOpt("job", a.address, a.program?.name ?? a.app); })))
       .child(cell(objName(a.program?.name ?? a.app), 96, fg(C.green)))
       .child(fill(upper(a.space_name), fg(C.green)))
-      .child(blink(cell(st, 52, fg(color)), a.status === "blocked" && !on));
+      .child(blink(cell(st, 52, fg(color)), blinks(a.status) && !on));
   }
 
   // ---------------------------------------------------------------- tabs
@@ -321,7 +323,7 @@ export default class As400 extends View {
           .on_mouse_down("right", () => openOpt("tab", t.id, tabLabel(t)))
           .child(txt(`${t.index}.`, on ? C.bg : C.white))
           .child(div().max_w(180).truncate().text_color(on ? C.bg : C.green).child(upper(tabLabel(t))))
-          .when(Boolean(st), (el) => el.child(blink(txt(st, on ? C.bg : color), t.status === "blocked" && !on)));
+          .when(Boolean(st), (el) => el.child(blink(txt(st, on ? C.bg : color), blinks(t.status) && !on)));
       }))
       .child(h_flex().id("tab-new").h(ROW).px(6).items_center().cursor_pointer()
         .hover((h) => h.bg(C.line))
@@ -350,7 +352,7 @@ export default class As400 extends View {
       .child(h_flex().flex_none().child(txt(dots("Job", 6) + " ", fg(C.green))).child(txt(objName(name), fg(C.white))))
       .child(h_flex().flex_none().child(txt(dots("Number", 8) + " ", fg(C.green))).child(txt(p.terminal ?? p.pane, fg(C.white))))
       .child(h_flex().flex_1().min_w(0).child(txt(dots("Dir", 5) + " ", fg(C.green))).child(fill(tilde(p.cwd), fg(C.white))))
-      .child(blink(txt(st, fg(color)), p.status === "blocked" && !on))
+      .child(blink(txt(st, fg(color)), blinks(p.status) && !on))
       .child(btn("F11", p.zoomed ? "Restore" : "Zoom", () => run("pane.zoom", { pane: id })))
       .child(btn("F16", "End", () => run("pane.close", { pane: id })));
   }

@@ -1,6 +1,6 @@
 # IBM AS/400
 
-Herdr as an IBM AS/400 5250 green screen: green and white text on black in a mainframe terminal font, spaces on a "Work with Spaces" list, agents on "Work with Active Jobs" where a blocked agent blinks `MSGW` in red, tabs as a numbered menu line, panes framed with `Job . . :` headers, and a `===>` command line with function keys and the operator information area (`MA`, `MW`, `X SYSTEM`) at the bottom.
+Herdr as an IBM AS/400 5250 green screen: green and white text on black in a mainframe terminal font, spaces on a "Work with Spaces" list, agents on "Work with Active Jobs" where a working, blocked or finished agent blinks `RUN`, `MSGW` (red) or `OUTQ`, tabs as a numbered menu line, panes framed with `Job . . :` headers, and a `===>` command line with function keys and the operator information area (`MA`, `MW`, `X SYSTEM`) at the bottom.
 
 ![IBM AS/400](preview.png)
 
@@ -27,7 +27,7 @@ Top to bottom; everything is black (`#000000`) with no title bar; traffic lights
 ## How it behaves
 
 - **Title screen**: when Herdr starts with this layout on (the app process is under 45 seconds old), a full-window black screen shows for 3 seconds: `HERDR GUIDE TO` / `WORK WITH AGENTS` / `IN THE` in large green letters, a thick green bar, `AS/400` in slanted block letters drawn with `A`, `$`, `/`, `4` and `0`, green characters falling below it (white heads, green tails fading to dim green), and at the bottom `Starting system . . .` blinking in white and `HERDR/400` / `VERSION 1 RELEASE 1` on the right. A click or any key closes it early. Switching to the layout later doesn't show it; `DSPLOGO` on the command line does.
-- **Agent status as job status** (sidebar rows, tab items, pane headers): working is `RUN` in white, blocked `MSGW` in red blinking (opacity 0.15 to 1, 1000ms), done `OUTQ` in yellow, idle `DEQW` in green. A pane without an agent (a shell, an editor) is `DSPW` in dim green. A space row with no agents shows no status. In reverse video the status text is black and doesn't blink.
+- **Agent status as job status** (sidebar rows, tab items, pane headers): working is `RUN` in white, blocked `MSGW` in red, done `OUTQ` in yellow, idle `DEQW` in green. `RUN`, `MSGW` and `OUTQ` blink (opacity 0.15 to 1, 1000ms); `DEQW` and `DSPW` don't. A pane without an agent (a shell, an editor) is `DSPW` in dim green. A space row with no agents shows no status. In reverse video the status text is black and doesn't blink.
 - **Space row**: a click selects the space (`space.select`). A click on its `_` or a right-click opens its options.
 - **Job row**: a click focuses the agent (`agent.focus`). `_` or right-click opens its options.
 - **Tab item**: a click selects it (`tab.select`); right-click opens its options. `F13=New tab` makes a tab in the active space.
@@ -69,7 +69,7 @@ Top to bottom; everything is black (`#000000`) with no title bar; traffic lights
 
 - The window is black and green in the IBM 3270 font, with `Herdr/400 Main Menu` on top and the OIA at the bottom.
 - Clicking a space row selects it and turns it reverse video; the header shows its name.
-- An agent that starts working shows `RUN` on its job row, tab and pane header, and `X SYSTEM` appears; a blocked one blinks `MSGW` and `MW`.
+- An agent that starts working blinks `RUN` on its job row, tab and pane header, and `X SYSTEM` appears; a blocked one blinks `MSGW` and `MW`.
 - Right-clicking a space opens `Work with Space`; typing `7` makes a new tab there.
 - Typing `CALL claude` on the command line opens a tab running claude; `FOO` shows `CPD0030 Command FOO in library *LIBL not found.`
 - Restarting Herdr shows the title screen with falling characters for 3 seconds; `DSPLOGO` shows it again.
