@@ -1,55 +1,17 @@
-<svg xml:space="preserve" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 200" shape-rendering="crispEdges" font-family="monospace" font-size="6">
-  <rect width="320" height="200" fill="#000000"/>
-  <!-- header -->
-  <text x="22" y="9" fill="#33ff33">MAIN</text>
-  <text x="128" y="9" fill="#ffffff">Herdr/400 Main Menu</text>
-  <text x="262" y="9" fill="#33ff33">System: <tspan fill="#ffffff">HERDR</tspan></text>
-  <text x="22" y="17" fill="#33ff33">Space . . : <tspan fill="#ffffff">MYREPO</tspan></text>
-  <text x="262" y="17" fill="#33ff33">11/20/26 19:24</text>
-  <!-- sidebar -->
-  <line x1="96" y1="22" x2="96" y2="168" stroke="#145214"/>
-  <line x1="0" y1="96" x2="96" y2="96" stroke="#145214"/>
-  <text x="22" y="30" fill="#ffffff">Work with Spaces</text>
-  <text x="4" y="38" fill="#6e9bff">1=Select 4=End</text>
-  <text x="4" y="47" fill="#ffffff">Opt Space   Status</text>
-  <rect x="2" y="50" width="92" height="7" fill="#33ff33"/>
-  <text x="4" y="55.5" fill="#000000">_   MYREPO   RUN</text>
-  <text x="4" y="63.5" fill="#33ff33">_   API      <tspan fill="#ff3b3b">MSGW</tspan></text>
-  <text x="4" y="71.5" fill="#33ff33">_   DOCS     <tspan fill="#33ff33">DEQW</tspan></text>
-  <text x="70" y="80" fill="#ffffff">Bottom</text>
-  <text x="14" y="105" fill="#ffffff">Work with Active Jobs</text>
-  <text x="4" y="114" fill="#ffffff">Opt Job     Status</text>
-  <text x="4" y="122" fill="#33ff33">_   CLAUDE   <tspan fill="#ffffff">RUN</tspan></text>
-  <text x="4" y="130" fill="#33ff33">_   CODEX    <tspan fill="#ff3b3b">MSGW</tspan></text>
-  <!-- tabs -->
-  <line x1="96" y1="31" x2="320" y2="31" stroke="#145214"/>
-  <text x="100" y="28" fill="#33ff33">Tabs :</text>
-  <rect x="122" y="22.5" width="40" height="7" fill="#33ff33"/>
-  <text x="124" y="28" fill="#000000">1. CLAUDE</text>
-  <text x="168" y="28" fill="#ffffff">2. <tspan fill="#33ff33">ZSH</tspan></text>
-  <text x="196" y="28" fill="#6e9bff">F13=New tab</text>
-  <!-- panes -->
-  <rect x="100.5" y="35.5" width="104" height="128" fill="none" stroke="#33ff33"/>
-  <rect x="101" y="36" width="103" height="7" fill="#33ff33"/>
-  <text x="103" y="41.5" fill="#000000">Job : CLAUDE   RUN</text>
-  <text x="104" y="52" fill="#33ff33">&gt; fix the login bug</text>
-  <text x="104" y="60" fill="#d8ffd8">Reading src/auth.ts</text>
-  <text x="104" y="68" fill="#33ff33">Editing 2 files...</text>
-  <rect x="208.5" y="35.5" width="107" height="128" fill="none" stroke="#145214"/>
-  <text x="211" y="41.5" fill="#33ff33">Job : <tspan fill="#ffffff">ZSH</tspan>   DSPW</text>
-  <line x1="209" y1="43.5" x2="315" y2="43.5" stroke="#145214"/>
-  <text x="212" y="52" fill="#33ff33">~/myrepo $ git status</text>
-  <text x="212" y="60" fill="#33ff33">On branch main</text>
-  <!-- console -->
-  <line x1="0" y1="170" x2="320" y2="170" stroke="#145214"/>
-  <text x="6" y="178" fill="#33ff33">===&gt;</text>
-  <line x1="24" y1="179" x2="314" y2="179" stroke="#33ff33"/>
-  <text x="6" y="186" fill="#6e9bff">F3=Exit  F4=Prompt  F6=Create  F9=Retrieve  F10=Split  F12=Cancel</text>
-  <line x1="0" y1="190" x2="320" y2="190" stroke="#1f9a1f"/>
-  <rect x="5" y="191.5" width="10" height="7" fill="#33ff33"/>
-  <text x="6" y="197" fill="#000000">MA</text>
-  <text x="22" y="197" fill="#33ff33">a</text>
-  <text x="32" y="197" fill="#ff3b3b">MW</text>
-  <text x="46" y="197" fill="#ffffff">X SYSTEM</text>
-  <text x="290" y="197" fill="#33ff33">01/001</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="220 -14 760 475" font-family="&quot;IBM 3270&quot;, monospace">
+  <style>@font-face { font-family: "IBM 3270"; src: url("../mods/ibm-as400/fonts/3270-Regular.ttf"); }</style>
+  <rect x="220" y="-14" width="760" height="475" fill="#000000"/>
+  <!-- title -->
+  <text x="600.0" y="86" fill="#33ff33" font-size="42" text-anchor="middle">HERDR GUIDE TO</text>
+  <text x="600.0" y="136" fill="#33ff33" font-size="42" text-anchor="middle">WORK WITH AGENTS</text>
+  <text x="600.0" y="186" fill="#33ff33" font-size="42" text-anchor="middle">IN THE</text>
+  <rect x="264.0" y="216" width="672.0" height="8" rx="4" fill="#33ff33"/>
+  <!-- AS/400 -->
+  <text x="342.4 352.1 361.9 371.6 381.3 439.6 449.3 459.1 468.8 478.5 488.2 497.9 595.1 604.9 682.6 692.3 702.1 750.7 760.4 770.1 779.8 789.5 799.3 809.0 857.6 867.3 877.0 886.7 896.5 906.2 915.9" y="266" fill="#33ff33" font-size="18">AAAAA$$$$$$$//44400000000000000</text>
+  <text x="323.0 332.7 371.6 381.3 420.2 429.9 488.2 497.9 575.7 585.4 663.2 672.9 682.6 692.3 731.2 740.9 799.3 809.0 838.1 847.9 906.2 915.9" y="286" fill="#33ff33" font-size="18">AAAA$$$$//444400000000</text>
+  <text x="303.5 313.3 371.6 381.3 410.5 420.2 556.3 566.0 643.7 653.5 672.9 682.6 721.5 731.2 789.5 799.3 828.4 838.1 896.5 906.2" y="306" fill="#33ff33" font-size="18">AAAA$$//444400000000</text>
+  <text x="293.8 303.5 361.9 371.6 410.5 420.2 429.9 439.6 449.3 459.1 468.8 536.8 546.5 624.3 634.0 663.2 672.9 711.8 721.5 779.8 789.5 818.7 828.4 886.7 896.5" y="326" fill="#33ff33" font-size="18">AAAA$$$$$$$//444400000000</text>
+  <text x="284.1 293.8 303.5 313.3 323.0 332.7 342.4 352.1 361.9 459.1 468.8 517.4 527.1 604.9 614.6 624.3 634.0 643.7 653.5 663.2 672.9 702.1 711.8 770.1 779.8 809.0 818.7 877.0 886.7" y="346" fill="#33ff33" font-size="18">AAAAAAAAA$$//4444444400000000</text>
+  <text x="274.4 284.1 342.4 352.1 381.3 391.0 449.3 459.1 497.9 507.7 643.7 653.5 692.3 702.1 760.4 770.1 799.3 809.0 867.3 877.0" y="366" fill="#33ff33" font-size="18">AAAA$$$$//4400000000</text>
+  <text x="264.7 274.4 332.7 342.4 381.3 391.0 400.7 410.5 420.2 429.9 439.6 478.5 488.2 634.0 643.7 692.3 702.1 711.8 721.5 731.2 740.9 750.7 799.3 809.0 818.7 828.4 838.1 847.9 857.6" y="386" fill="#33ff33" font-size="18">AAAA$$$$$$$//4400000000000000</text>
 </svg>
